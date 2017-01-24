@@ -1,0 +1,4 @@
+﻿<config>
+<cssfile>/usr/share/arcom/css/arcomivi.qss</cssfile>
+<log><loglevel>3</loglevel><logconsole>1</logconsole></log>
+</config>
