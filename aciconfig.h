@@ -7,8 +7,8 @@
 #define ACI_VERSION "0.9.3-0.12"
 
 #ifdef Q_OS_WIN
-#define ACI_CONFIG_XML "C:/temp/arcom/aciconfig.xml"
-#define ACI_QML "file:///C:/temp/downloads/temp/workspace/Tests/aci-qml/QML/"
+#define ACI_CONFIG_XML "C:/Qt/ws/Test/Test/aciconfig.xml"
+#define ACI_QML "file:///C:/Qt/ws/Test/Test/qml/"
 #define ACI_CSS "file:///C:/temp/arcom/"
 #endif
 

@@ -13,14 +13,18 @@ ACIMainview::ACIMainview(QQuickView *parent) :
 }
 
 void ACIMainview::setQmlFile(QString qml){
+    model = new ACIListModel();
+    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(model));
+
     this->setSource(QUrl(qml));
+
     QObject::connect((QObject*)this->rootObject(), SIGNAL(update()), this , SLOT(updateMe()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(navigateTo(int)), this , SLOT(navigateTo(int)));
     QObject::connect(ACIUsbController::getInstance(), SIGNAL(broadcastCtrlEvent(QString)), this, SLOT(onBroadcastCtrlEvent(QString)));
     QTimer::singleShot(500, ACIUsbController::getInstance(), SLOT(connectCtrlSignal()));
 
 
-    model = new ACIListModel();
+
 
 
     QString music = QDir::homePath() + "/Music";
@@ -77,7 +81,7 @@ void ACIMainview::setQmlFile(QString qml){
     }
     qDebug() << "homepath" << QDir::homePath();
 
-    this->rootContext()->setContextProperty(QLatin1String("listModel"), model);
+    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(model));
 }
 
 void ACIMainview::keyPressEvent(QKeyEvent *e){

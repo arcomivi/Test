@@ -4,7 +4,11 @@
 #include <QObject>
 #include <QMutex>
 #include <QFile>
+
+#ifdef Q_OS_LINUX
 #include <QtDBus/QDBusConnection>
+#endif
+
 #include <QDebug>
 #include "aciconfig.h"
 

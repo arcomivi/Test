@@ -5,27 +5,15 @@
 #include "globalincludes.h"
 #include "aciconfig.h"
 #include "acimainview.h"
-#include <QtMultimedia>
-#include <QCameraInfo>
-#include <QVideoWidget>
 #include <QLabel>
 #include <QImage>
 #include <QPixmap>
-
-//#include "qfoo.h"
-//#include "acicamera.h"
 
 
 int main(int argc, char *argv[]){
 
 
 //    qmlRegisterType<ACICamera>("ACIElements", 1, 0, "ACICamera");
-
-    foreach (const QCameraInfo &cameraInfo, QCameraInfo::availableCameras())    {
-        qDebug() << "Camera: " << cameraInfo.deviceName();
-    }
-
-
 
     TRACE_CONSOLE("Start...");
     QApplication a(argc, argv);
