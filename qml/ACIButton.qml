@@ -16,7 +16,7 @@ Item {
     property string pngname
     property bool keyUsing: false
     property int borderWidth: 0;
-    property color borderColor: Qt.rgba(0.0, 0.0, 0.0, 0.0)
+    //property color borderColor: Qt.rgba(0.0, 0.0, 0.0, 0.0)
 
 
     property int fontSize: 20
@@ -67,6 +67,17 @@ Item {
 
 
 
+    //border with rounded corners
+    Rectangle {
+        id: buttonBorder
+        color: "#636363";
+        anchors.fill: buttonRoot
+//        color: buttonRoot.borderColor
+        border.color: "orange"
+        border.width: borderWidth;
+        radius: 2
+    }
+
     MouseArea {
         id: mouseRegion
         hoverEnabled: true
@@ -103,13 +114,5 @@ Item {
         }
     }
 
-    //border with rounded corners
-    Rectangle {
-        id: buttonBorder
-        anchors.fill: buttonRoot
-        color: buttonRoot.borderColor
-        border.color: "orange"
-        border.width: borderWidth;
-        radius: 2
-    }
+
 }

@@ -65,7 +65,7 @@ Item {
     Rectangle {
         id: status_bar_rect
         width: parent.width; height: parent.height;
-        color: Qt.rgba(0.0, 0.0, 0.0, 0.0);
+        color: "#636363"
         Rectangle {
             id: mediaProgress; x: 0; y: 0; height: parent.height;
             width: 0; color: "#B5C808"; opacity: 0.8;

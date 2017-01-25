@@ -12,7 +12,7 @@ Item {
     //smaller text
     Rectangle {
         height:parent.height; width: parent.width;
-        color: Qt.rgba(0.0,0.0,0.0,0.0);
+        color: "#636363"
         Text {
             id: standardListItemText
             text: name

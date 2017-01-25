@@ -1,10 +1,8 @@
 ﻿import QtQuick 2.5
 
-//Rectagle
 Item {
     id: rootMainMenu
     objectName: "rootMainMenu"
-//    color: "transparent"//Qt.rgba(0.0, 0.0, 0.0, 0.5)
 
     // ==> properties
     property int noOfElements: 4
@@ -114,10 +112,7 @@ Item {
             width: parent.width / noOfElements;
             height: parent.height
             id: mainmenu_bt_media
-            objectName: btnPrefix+"media"
             keyUsing: true;
-            //imgScale: 0.25
-            opacity: 1
             pngname: "media"
             text: ""
             btnImg: g_cssprefix + "css/mainmenu/active/"+ pngname +"013.png"
@@ -128,7 +123,10 @@ Item {
             function setInactive() { setButtonInactive(); }
             function setClicked()  { setButtonClicked(); }
             function setReleased() { setButtonReleased(); }
-            onClicked: {  wasClicked = false; }
+            onClicked: {
+                wasClicked = false;
+                enterMedia();
+            }
         }
 
         ACIButton {

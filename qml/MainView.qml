@@ -2,10 +2,8 @@ import QtQuick 2.5
 import QtMultimedia 5.5
 //import ACIElements 1.0
 
-//Rectangle
 Item {
     id: mainview
-    //color: "transparent"
 
     // ==> properties
     property int m_current: -1
@@ -18,17 +16,9 @@ Item {
 
 
     //  ==> functions
-//    function rotateCW(){
-//        standardListView.rotateCW();
-//    }
-
-//    function rotateCCW(){
-//        standardListView.rotateCCW();
-//    }
-
     function handleRot(direction){
         console.log("mainview-handleRot: "+ direction + " ("+m_current+")");
-        if(m_current===-1) { m_current = 1; }        
+        if(m_current===-1) { m_current = 0; }
         mainview.children[m_current].handleRot(direction);
     }
 
@@ -56,26 +46,18 @@ Item {
             mainview.children[m_current].handleEnter();
         }
     }
-Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
-    // ==> UI elements
-    // ===> background image (m_current === 0)
-//    Image {
-//        id: wallpaper
-//        anchors.centerIn: parent;
-//        //width: Math.floor(parent.width);
-//        //height: Math.floor(parent.height);
-////        source: "/usr/share/arcomivi/css/common/wallpaper640x480.png"
-//        asynchronous: true;
-//    }
 
-    // ===> Main Menu (m_current === 1)
+    // ==> UI elements
+    // ===> Main Menu (m_current === 0)
     MainMenu {
         id: mainMenu;
         objectName: "mainMenu"
         width: parent.width;
         height: Math.floor(parent.height*0.1);
         anchors.top: mainview.top;
-        g_cssprefix: "/usr/share/arcomivi/";
+        //g_cssprefix: "/usr/share/arcomivi/";
+        g_cssprefix: "file:///C:/Qt/ws/Test/Test/"
+
         onNavigateTo: {
 //            mainview.navigateTo(widget);
             switch(widget){
@@ -94,8 +76,8 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
             }
         }
         onEnterMedia: {
-            mainview.m_current = 2;
-            viewsSwitcher.goToView(0);
+            mainview.m_current = 1;
+            viewsSwitcher.goToView(1);
         }
     }
 
@@ -171,6 +153,7 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
 //        }
 //    }
 
+    //    (m_current === 1)
     ViewsSwitcher {
         id: viewsSwitcher
         objectName: "viewsSwitcher"
@@ -179,8 +162,6 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
         height: Math.floor(parent.height*0.7);
         anchors {
             top: mainMenu.bottom;
-            //bottom: statusBar.top;
-            //bottom: viewSteerings.top;
         }
 
         function goToView(view){
@@ -238,11 +219,28 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
             //ACIPictures - list: all from Pictures
             //ACIRadio - list: radio stations
             //ACITelevision - list: Streams, DVB
+
             //0
+            Item {
+                id: viewFoo;
+                objectName: "foo"
+                visible: true;
+                width: parent.width; height: parent.height;
+                Rectangle { color: "#636363"; anchors.fill: parent;
+                    Text {
+                        id: name
+                        text: qsTr("10:05")
+                        color: "white"
+                        font.pixelSize: 60;
+                        anchors.centerIn: parent;
+                    }
+                }
+            },
+            //1
             Item {
                 id: acimediaview;
                 width: parent.width; height: parent.height;
-
+                visible: false;
                 function handleRelease() {
                     console.log("acimediaview.handleRelease");
                     mediaplayer.stop();
@@ -284,14 +282,11 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
                     height: Math.floor(parent.height);
                     focus: true
                     anchors.fill: parent;
-                    model: listModel;
-                    anchors {
-                        fill: parent;
-                    }
+                    clip: true;
                     delegate:
                         ACIStandardListItem {
                         height: Math.floor(list.height / 5);
-                        property string foo: ""
+
                         onItemClicked: {
                             list.currentIndex = index;
                             listModel.listClicked(index);
@@ -304,29 +299,21 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
                     onCurrentIndexChanged: {
                         console.log(list.model.getCurrentName(list.currentIndex));
                     }
+                    Component.onCompleted: {
+                        console.log("list.count1 = "+list.count);
+                        model = listModel;
+                        console.log("list.count2 = "+list.count);
+
+                    }
                 }
-            },
+            }
 //            //1
 //            ACICamera {
 //                id: acicam;
 //                width: parent.width; height: parent.height;
 //            },
 
-            //2
-            Item {
-                id: viewFoo;
-                objectName: "foo"
-                width: parent.width; height: parent.height;
-                Rectangle { color: "transparent"; anchors.fill: parent;
-                    Text {
-                        id: name
-                        text: qsTr("10:05")
-                        color: "white"
-                        font.pixelSize: 40;
-                        anchors.centerIn: parent;
-                    }
-                }
-            }
+
             //1
 //            Item {
 //                id: viewBar;
@@ -430,28 +417,34 @@ Rectangle { anchors.fill: parent; color: "#636363"; z: 0;}
 
     }
 
-/*    Steerings {
+    //    (m_current === 2)
+    Steerings {
         id: viewSteerings
         objectName: "viewSteerings"
         width: parent.width;
         height: Math.floor(parent.height*0.15);
-        g_cssprefix: "/usr/share/arcomivi/";
-        onVolup: mediaplayer.volume = mediaplayer.volume + 0.1;
-        onVoldown: mediaplayer.volume = mediaplayer.volume - 0.1;
-        onBackToPrevious: { mainview.m_current=2; }
+        //g_cssprefix: "/usr/share/arcomivi/";
+        g_cssprefix: "file:///C:/Qt/ws/Test/Test1/"
         anchors {
-//            top: viewsSwitcher.bottom;
             bottom: statusBar.top;
         }
-    }*/
+
+        onVolup: mediaplayer.volume = mediaplayer.volume + 0.1;
+        onVoldown: mediaplayer.volume = mediaplayer.volume - 0.1;
+        onPlaypauseMusic: acimediaview.handleRelease();
+        onBackToPrevious: { mainview.m_current = 2; }
+
+    }
 
     //status bar
+    //    (m_current === 3)
     StatusBar {
         id: statusBar;
         objectName: "statusBar"
         width: parent.width;
         height: Math.floor(parent.height*0.05);
-        g_cssprefix: "/usr/share/arcomivi/";
+        //g_cssprefix: "/usr/share/arcomivi/";
+        g_cssprefix: "file:///C:/Qt/ws/Test/Test/"
         anchors {
             bottom: mainview.bottom;
         }

@@ -11,11 +11,13 @@ Item {
         for(var i = 0; i < pages.length; i++)
         {
             pages[i].x = 1024;
+            pages[i].visible = false;
 //            console.log("jumpTo-move X to: "+pages[i].x);
         }
         pages[idx].x = 0;
+        pages[idx].visible = true;
         currentPage = pages[idx];
-//        console.log("jumpTo:"+idx +", "+pages[idx].x);
+        console.log("jumpTo:"+idx +", x: "+pages[idx].x +", visible:"+pages[idx].visible);
     }
 
     Item {
