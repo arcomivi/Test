@@ -15,7 +15,7 @@ Item {
         color: "#636363"
         Text {
             id: standardListItemText
-            text: name
+            text: descr
             font {
                 family: "Helvetica";
                 pixelSize: 18;

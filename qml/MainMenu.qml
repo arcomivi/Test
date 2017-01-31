@@ -54,8 +54,8 @@ Item {
             break;
         case 3:
             mainMenuRow.children[m_current].setButtonReleased();
-//            rootMainMenu.enterSettings();
-            rootMainMenu.navigateTo(9);//9=ViewSettings
+            rootMainMenu.enterSettings();
+//            rootMainMenu.navigateTo(9);//9=ViewSettings
             break;
         }
     }
@@ -184,7 +184,7 @@ Item {
 //            function setInactive() { setButtonInactive(); }
 //            function setClicked()  { setButtonClicked(); }
 //            function setReleased() { setButtonReleased(); }
-            onClicked: { wasClicked = false; }
+            onClicked: { wasClicked = false; enterSettings(); }
         }
     }
 }
