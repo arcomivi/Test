@@ -3,7 +3,7 @@
 
 #include "aciconfig.h"
 #include "aciusbcontroller.h"
-#include "acilistmodel.h"
+#include "acimedia.h"
 
 class ACIMainview : public QQuickView
 {
@@ -23,12 +23,13 @@ public slots:
     void navigateTo(int widget);
     void handleRot(int direction);
     void updateMe();
+    void loadMedia();
 private:
     //structure with current and previous USB controller signal
     ACIUsbCtrlSignals m_sCtrl, m_sCtrlPrev;
     bool m_bCtrlFirstRun;
     QString m_sPreviousSignal;
-    ACIListModel *model;
+    ACIMedia *m_oMedia;
 };
 
 #endif // ACIMAINVIEW_H

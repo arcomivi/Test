@@ -13,75 +13,23 @@ ACIMainview::ACIMainview(QQuickView *parent) :
 }
 
 void ACIMainview::setQmlFile(QString qml){
-    model = new ACIListModel();
-    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(model));
-
+    m_oMedia = new ACIMedia();
     this->setSource(QUrl(qml));
+
+    QObject::connect((QObject*)m_oMedia, SIGNAL(mediaChanged()), this , SLOT(loadMedia()));
+    QObject::connect((QObject*)this->rootObject(), SIGNAL(loadMedia()), this , SLOT(loadMedia()));
 
     QObject::connect((QObject*)this->rootObject(), SIGNAL(update()), this , SLOT(updateMe()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(navigateTo(int)), this , SLOT(navigateTo(int)));
     QObject::connect(ACIUsbController::getInstance(), SIGNAL(broadcastCtrlEvent(QString)), this, SLOT(onBroadcastCtrlEvent(QString)));
     QTimer::singleShot(500, ACIUsbController::getInstance(), SLOT(connectCtrlSignal()));
 
+//    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(model));
+}
 
-
-
-
-    QString music = QDir::homePath() + "/Music";
-    QDir musicDir(music);
-    if(musicDir.exists()){
-        foreach (QString entry, musicDir.entryList()) {
-            qDebug() << entry;
-        }
-        foreach (QFileInfo fileInfo, musicDir.entryInfoList()) {
-            qDebug() << fileInfo.baseName();
-            if (fileInfo.isDir()) {
-               QString song = music + "/" + fileInfo.baseName();
-               foreach (QFileInfo song, QDir(song).entryInfoList()) {
-                   if (song.isDir()) {
-                       continue;
-                   }
-                   qDebug() << "song: " << song.baseName();
-                   qDebug() << "path: " << song.absoluteFilePath();
-                   model->addItem(Item(song.baseName(), song.absoluteFilePath()));
-               }
-            }
-        }
-    } else {
-        qDebug() << "does not exiswt";
-    }
-    foreach (const QStorageInfo &storage, QStorageInfo::mountedVolumes()) {
-        if (storage.isValid() && storage.isReady()) {
-            qDebug() << "name" << storage.name();
-            qDebug() << "rootpath" << storage.rootPath();
-            music = storage.rootPath() + "/Music";
-            QDir musicDir(music);
-            if(musicDir.exists()){
-                foreach (QString entry, musicDir.entryList()) {
-                    qDebug() << entry;
-                }
-                foreach (QFileInfo fileInfo, musicDir.entryInfoList()) {
-                    qDebug() << fileInfo.baseName();
-                    if (fileInfo.isDir()) {
-                        QString song = music + "/" + fileInfo.baseName();
-                        foreach (QFileInfo song, QDir(song).entryInfoList()) {
-                            if (song.isDir()) {
-                                continue;
-                            }
-                            qDebug() << "song: " << song.baseName();
-                            qDebug() << "path: " << song.absoluteFilePath();
-                            model->addItem(Item(song.baseName(), song.absoluteFilePath()));
-                        }
-                    }
-                }
-            }
-
-
-        }
-    }
-    qDebug() << "homepath" << QDir::homePath();
-
-    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(model));
+void ACIMainview::loadMedia(){
+    m_oMedia->loadMedia();
+    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(m_oMedia->getModel()));
 }
 
 void ACIMainview::keyPressEvent(QKeyEvent *e){
@@ -93,40 +41,40 @@ void ACIMainview::keyPressEvent(QKeyEvent *e){
     //        return;
     //    }
 
-        if(e->key() == Qt::Key_W){ //UP
-            QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleDirUp", Qt::DirectConnection);
-            return;
-        }
-        if(e->key() == Qt::Key_Z){ //DOWN
-            QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleDirDown", Qt::DirectConnection);
-            return;
-        }
-    //    if(e->key() == Qt::Key_A){ //LEFT
-    //        QMetaObject::invokeMethod(m_oCurrentObject, "handleDirLeft", Qt::DirectConnection);
-    //        return;
-    //    }
-    //    if(e->key() == Qt::Key_D){ //RIGHT
-    //        QMetaObject::invokeMethod(m_oCurrentObject, "handleDirRight", Qt::DirectConnection);
-    //        return;
-    //    }
-        if(e->key() == Qt::Key_P){ //PUSHB
-            QMetaObject::invokeMethod((QObject*)this->rootObject(), "handlePush", Qt::DirectConnection);
-            return;
-        }
-        if(e->key() == Qt::Key_R){ //release PUSHB
-            QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRelease", Qt::DirectConnection);
-            return;
-        }
-        if(e->key() == Qt::Key_M){ //ROT1
-            QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 0));
-            return;
-        }
-        if(e->key() == Qt::Key_N){ //ROT2
-            QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 1));
-            return;
-        }
+    if(e->key() == Qt::Key_W){ //UP
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleDirUp", Qt::DirectConnection);
+        return;
+    }
+    if(e->key() == Qt::Key_Z){ //DOWN
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleDirDown", Qt::DirectConnection);
+        return;
+    }
+    if(e->key() == Qt::Key_A){ //LEFT
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleDirLeft", Qt::DirectConnection);
+        return;
+    }
+    if(e->key() == Qt::Key_D){ //RIGHT
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleDirRight", Qt::DirectConnection);
+        return;
+    }
+    if(e->key() == Qt::Key_P){ //PUSHB
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handlePush", Qt::DirectConnection);
+        return;
+    }
+    if(e->key() == Qt::Key_R){ //release PUSHB
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRelease", Qt::DirectConnection);
+        return;
+    }
+    if(e->key() == Qt::Key_M){ //ROT1
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 0));
+        return;
+    }
+    if(e->key() == Qt::Key_N){ //ROT2
+        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 1));
+        return;
+    }
 
-        QQuickView::keyPressEvent(e);
+    QQuickView::keyPressEvent(e);
 }
 
 void ACIMainview::onBroadcastCtrlEvent(QString event){
