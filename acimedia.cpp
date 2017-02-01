@@ -40,11 +40,16 @@ void ACIMedia::mediaModelClicked(Item itemClicked){
     TRACE(QString("Name: %1").arg(itemClicked.name()));
     TRACE(QString("Descr: %1").arg(itemClicked.descr()));
     TRACE(QString("Value: %1").arg(itemClicked.value()));
+
     QString name = itemClicked.name();
-    if(name.compare("MEDIA_MUSIC")==0){
+    if(name.compare("MEDIA_INITIAL")==0){
+        m_iMediaType=MEDIA_INITIAL;
+        emit mediaChanged();
+    } else if(name.compare("MEDIA_MUSIC")==0){
         m_iMediaType=MEDIA_MUSIC;
+        m_iMusicType=MUSIC_INITIAL;
         displayMusic();
-    } else if(name.compare("ALL_SONGS")==0){
+    } else if(name.compare("MUSIC_ALL_SONGS")==0){
         m_iMusicType=MUSIC_ALL_SONGS;
         displayMusic();
     } else if(name.compare("SONG")==0){
@@ -56,12 +61,7 @@ void ACIMedia::mediaModelClicked(Item itemClicked){
             m_bNewPlaylist = false;
         }
         m_oMusicPlayer->playPause(m_oMediaModel->getCurrentIndex()==0?0:m_oMediaModel->getCurrentIndex()-1);
-//        m_iMediaType = VIDEO_ALL_VIDEOS;
-//        displayVideo();
     } else if(name.compare("ALL_PICTURES")==0){
-//        m_iMediaType = PICTURE_PATH;
-//        QString value = itemClicked.value();
-//        displayPathPictures(value);
     }
     TRACE("exit");
 }
@@ -75,7 +75,6 @@ void ACIMedia::displayMusic() {
     switch(m_iMusicType){
     case MUSIC_INITIAL:
         emit mediaChanged();
-//        displayInitialMusic();
         break;
     case MUSIC_ALL_ALBUMS:
 //        emit mediaChanged();
@@ -84,7 +83,6 @@ void ACIMedia::displayMusic() {
         emit mediaChanged();
         break;
     case MUSIC_SONGS_ARTIST_ALBUM:
-//        displaySongsAlbumArtist();
         break;
     default:
         break;
@@ -94,9 +92,10 @@ void ACIMedia::displayMusic() {
 
 void ACIMedia::displayInitialMusic(){
     m_oMediaModel->removeRows(0, m_oMediaModel->rowCount());
-    m_oMediaModel->addItem(Item("ALL_ALBUMS", "All Albums", "music", "folder"));
-    m_oMediaModel->addItem(Item("ALL_ARTISTS", "All Artists", "music", "folder"));
-    m_oMediaModel->addItem(Item("ALL_SONGS", "All Songs", "music", "folder"));
+    m_oMediaModel->addItem(Item("MEDIA_INITIAL", "..", "music", "folder"));
+    m_oMediaModel->addItem(Item("MUSIC_ALL_ALBUMS", "All Albums", "music", "folder"));
+    m_oMediaModel->addItem(Item("MUSIC_ALL_ARTISTS", "All Artists", "music", "folder"));
+    m_oMediaModel->addItem(Item("MUSIC_ALL_SONGS", "All Songs", "music", "folder"));
 }
 
 void ACIMedia::displayAllSongs(){
@@ -104,7 +103,7 @@ void ACIMedia::displayAllSongs(){
     m_oMediaModel->removeRows(0, m_oMediaModel->rowCount());
     m_songList.clear();
 
-    m_oMediaModel->addItem(Item(QLatin1String("( ... go up ... )"),"Go back to main list","go_back_to_main", "left"));
+    m_oMediaModel->addItem(Item("MEDIA_MUSIC","..","go_back_to_main", "left"));
 
     QString music = QDir::homePath() + "/Music";
     QDir musicDir(music);
