@@ -24,6 +24,8 @@ public slots:
     void handleRot(int direction);
     void updateMe();
     void loadMedia();
+    void sendProgress(int progress);
+
 private:
     //structure with current and previous USB controller signal
     ACIUsbCtrlSignals m_sCtrl, m_sCtrlPrev;

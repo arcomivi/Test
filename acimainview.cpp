@@ -17,7 +17,11 @@ void ACIMainview::setQmlFile(QString qml){
     this->setSource(QUrl(qml));
 
     QObject::connect((QObject*)m_oMedia, SIGNAL(mediaChanged()), this , SLOT(loadMedia()));
+    connect(m_oMedia, SIGNAL(sendProgress(int)), this , SLOT(sendProgress(int)));
+
     QObject::connect((QObject*)this->rootObject(), SIGNAL(loadMedia()), this , SLOT(loadMedia()));
+    QObject::connect((QObject*)this->rootObject(), SIGNAL(volup()), m_oMedia , SLOT(volup()));
+    QObject::connect((QObject*)this->rootObject(), SIGNAL(voldown()), m_oMedia , SLOT(voldown()));
 
     QObject::connect((QObject*)this->rootObject(), SIGNAL(update()), this , SLOT(updateMe()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(navigateTo(int)), this , SLOT(navigateTo(int)));
@@ -31,6 +35,12 @@ void ACIMainview::loadMedia(){
     m_oMedia->loadMedia();
     this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(m_oMedia->getModel()));
 }
+
+void ACIMainview::sendProgress(int progress){
+    QMetaObject::invokeMethod((QObject*)this->rootObject(), "sendProgress", Q_ARG(QVariant, progress));
+}
+
+
 
 void ACIMainview::keyPressEvent(QKeyEvent *e){
     TRACE(e->key());

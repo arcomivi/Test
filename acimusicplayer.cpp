@@ -25,10 +25,9 @@ ACIMusicPlayer::ACIMusicPlayer(QObject *parent) :
  *
  */
 void ACIMusicPlayer::tick(qint64 time){
-    TRACE(QString("enter %1").arg(time));
+    //TRACE(QString("enter %1").arg(time));
     //===> get time
     QTime displayTime(0,(int) ((time / 60000) % 60), (int)((time / 1000) % 60));
-    TRACE("B1");
     emit tickSong(displayTime.toString("mm:ss"));
 
     //===> get percentage
@@ -37,7 +36,6 @@ void ACIMusicPlayer::tick(qint64 time){
     if(totalTime>0) {
         progress = (100*time) / totalTime;
     }
-    TRACE(QString("B2 %1").arg(totalTime));
     emit sendProgress(progress);
 
     TRACE("exit");

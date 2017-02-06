@@ -11,6 +11,7 @@ ACIMedia::ACIMedia(QObject *parent) : QObject(parent){
     m_bNewPlaylist = true;
 
     connect(m_oMediaModel, SIGNAL(itemClicked(Item)), this, SLOT(mediaModelClicked(Item)));
+    connect(m_oMusicPlayer, SIGNAL(sendProgress(int)), this, SIGNAL(sendProgress(int)));
 }
 
 ACIListModel *ACIMedia::getModel()
@@ -34,6 +35,14 @@ void ACIMedia::loadMedia()
         }
     }
 
+}
+
+void ACIMedia::volup(){
+    m_oMusicPlayer->volumeUp();
+}
+
+void ACIMedia::voldown(){
+    m_oMusicPlayer->volumeDown();
 }
 
 void ACIMedia::mediaModelClicked(Item itemClicked){

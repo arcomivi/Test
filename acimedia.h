@@ -12,15 +12,19 @@ public:
     explicit ACIMedia(QObject *parent = 0);
     ACIListModel* getModel();
     void loadMedia();
+
     void displayMusic();
     void displayInitialMusic();
     void displayAllSongs();
 
 signals:
     void mediaChanged();
+    void sendProgress(int);
 
 public slots:
     void mediaModelClicked(Item itemClicked);
+    void volup();
+    void voldown();
 
 private:
     enum {
