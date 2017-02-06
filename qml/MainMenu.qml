@@ -8,7 +8,7 @@ Item {
     property int noOfElements: 4
     property string btnPrefix: "internet-bt-"
     property int m_current: -1
-    property string g_cssprefix
+//    property string g_cssprefix
 
     // ==> signals
     signal enterMedia
@@ -16,6 +16,7 @@ Item {
     signal enterSync
     signal enterSettings
     signal navigateTo(int widget);
+    signal goDown
 
     // ==> functions
 //    function setGeometry(vwidth, vheight){
@@ -104,6 +105,9 @@ Item {
         mainMenuRow.children[m_current].setButtonActive();
     }
 
+    function handleDirUp(){ goDown(); }
+    function handleDirDown(){ }
+
     Row {
         id: mainMenuRow;
         width: parent.width; height: parent.height;
@@ -117,7 +121,6 @@ Item {
             text: ""
             btnImg: g_cssprefix + "css/mainmenu/active/"+ pngname +"013.png"
             btnImgPressed: g_cssprefix + "css/mainmenu/inactive/"+pngname+".png"
-            active: true;
 
             function setActive()   { setButtonActive();   }
             function setInactive() { setButtonInactive(); }

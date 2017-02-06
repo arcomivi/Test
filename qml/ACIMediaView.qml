@@ -2,6 +2,16 @@ import QtQuick 2.5
 
 Item {
     id: acimediaview;
+    signal goUp
+    signal goDown
+
+
+
+    function handleDirUp(){
+        console.log("acimediaview.handleDirUp");
+        goUp();
+    }    
+
     function handleRelease() {
         console.log("acimediaview.handleRelease");
         list.model.listClicked(list.currentIndex);
@@ -30,6 +40,13 @@ Item {
         list.positionViewAtIndex(list.currentIndex, ListView.Center);
     }
 
+    function handlePrevious(){
+        rotateCCW();
+    }
+
+    function handleNext(){
+        rotateCW();
+    }
 
     ListView {
         id: list;
@@ -44,13 +61,11 @@ Item {
 
             onItemClicked: {
                 list.currentIndex = index;
-                listModel.listClicked(index);
-                console.log(descr);
+                listModel.listClicked(list.currentIndex);
+                console.log("onItemClicked:"+descr);
             }
         }
-        onCurrentIndexChanged: {
-            console.log(list.model.getCurrentName(list.currentIndex));
-        }
+
         Component.onCompleted: {
             console.log("list.count1 = "+list.count);
             model = listModel;

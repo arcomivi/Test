@@ -9,6 +9,7 @@ Rectangle {
 
     property int noOfElements: 7
     property int m_iCurrent: -1;
+    property string m_sPrefix: "css/media/active/10/"
 
     signal goRight
     signal goLeft
@@ -101,7 +102,7 @@ Rectangle {
                 opacity: 1
                 pngname: "left"
                 text: ""
-                btnImg: g_cssprefix + "css/common/active/"+ pngname +".png"
+                btnImg: g_cssprefix + m_sPrefix + pngname +".png"
                 btnImgPressed: g_cssprefix + "css/common/inactive/"+pngname+".png"
 
                 function setActive()   { setButtonActive();   }
@@ -114,12 +115,12 @@ Rectangle {
                 width: parent.width / 6
                 height: parent.height
                 id: audio_bt_volup
-                objectName: "audio-bt-volup"
+                //objectName: "audio-bt-volup"
                 keyUsing: true;
                 opacity: 1
                 pngname: "volup"
                 text: ""
-                btnImg: g_cssprefix + "css/media/active/"+ pngname +".png"
+                btnImg: g_cssprefix + m_sPrefix + pngname +".png"
                 btnImgPressed: g_cssprefix + "css/media/inactive/"+pngname+".png"
                 function setActive()   { setButtonActive();   }
                 function setInactive() { setButtonInactive(); }
@@ -131,12 +132,12 @@ Rectangle {
                 width: parent.width / 6
                 height: parent.height
                 id: audio_bt_voldown
-                objectName: "audio-bt-voldown"
+                //objectName: "audio-bt-voldown"
                 keyUsing: true;
                 opacity: 1
                 pngname: "voldown"
                 text: ""
-                btnImg: g_cssprefix + "css/media/active/"+ pngname +".png"
+                btnImg: g_cssprefix + m_sPrefix + pngname +".png"
                 btnImgPressed: g_cssprefix + "css/media/inactive/"+pngname+".png"
                 function setActive()   { setButtonActive();   }
                 function setInactive() { setButtonInactive(); }
@@ -148,12 +149,12 @@ Rectangle {
                 width: parent.width / 6
                 height: parent.height
                 id: audio_bt_last
-                objectName: "audio-bt-last"
+                //objectName: "audio-bt-last"
                 keyUsing: true;
                 opacity: 1
                 pngname: "last"
                 text: ""
-                btnImg: g_cssprefix + "css/media/active/"+ pngname +".png"
+                btnImg: g_cssprefix + m_sPrefix + pngname +".png"
                 btnImgPressed: g_cssprefix + "css/media/inactive/"+pngname+".png"
                 function setActive()   { setButtonActive();   }
                 function setInactive() { setButtonInactive(); }
@@ -165,12 +166,12 @@ Rectangle {
                 width: parent.width / 6
                 height: parent.height
                 id: audio_bt_play
-                objectName: "audio-bt-play"
+                //objectName: "audio-bt-play"
                 keyUsing: true;
                 opacity: 1
                 pngname: "play"
                 text: ""
-                btnImg: g_cssprefix + "css/media/active/"+ pngname +".png"
+                btnImg: g_cssprefix + m_sPrefix + pngname +".png"
                 btnImgPressed: g_cssprefix + "css/media/inactive/"+pngname+".png"
                 function setActive()   { setButtonActive();   }
                 function setInactive() { setButtonInactive(); }
@@ -187,7 +188,7 @@ Rectangle {
                 opacity: 1
                 pngname: "next"
                 text: ""
-                btnImg: g_cssprefix + "css/media/active/"+ pngname +".png"
+                btnImg: g_cssprefix + m_sPrefix + pngname +".png"
                 btnImgPressed: g_cssprefix + "css/media/inactive/"+pngname+".png"
                 function setActive()   { setButtonActive();   }
                 function setInactive() { setButtonInactive(); }
@@ -204,7 +205,7 @@ Rectangle {
                 opacity: 1
                 pngname: "right"
                 text: ""
-                btnImg: g_cssprefix + "css/common/active/"+ pngname +".png"
+                btnImg: g_cssprefix + "css/common/active/13/"+ pngname +".png"
                 btnImgPressed: g_cssprefix + "css/common/inactive/"+pngname+".png"
 
                 function setActive()   { setButtonActive();   }
@@ -215,7 +216,6 @@ Rectangle {
         }
         ACIProgressBar {
             id: music_progress;
-            objectName: "audio-progress"
 
             width: parent.width;
             height: parent.height / 3;

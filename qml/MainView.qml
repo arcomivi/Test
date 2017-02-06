@@ -7,6 +7,7 @@ Item {
 
     // ==> properties
     property int m_current: -1
+    property string g_cssprefix: Qt.platform.os==="windows"?"file:///C:/Qt/ws/Test/Test/":"/usr/share/arcomivi/";
 
     signal update
     signal restart
@@ -15,11 +16,17 @@ Item {
     signal zoomoutNavi;
 
     signal loadMedia
+    signal volup
+    signal voldown
 
 
     //  ==> functions
+    function sendProgress(progress){
+        console.log("progress: "+progress);
+        viewSteerings.setMusicProgress(progress);
+    }
+
     function handleRot(direction){
-        console.log("mainview-handleRot: "+ direction + " ("+m_current+")");
         if(m_current===-1) { m_current = 0; }
         mainview.children[m_current].handleRot(direction);
     }
@@ -33,32 +40,32 @@ Item {
     }
 
     function handleDirUp(){
-        console.log("mainview-handleDirUp");
         mainview.children[m_current].handleDirUp();
     }
 
     function handleDirDown(){
-        console.log("mainview-handleDirDown");
-        //TODO: refactor
-        if(mainview.m_current===1) {
-            mainview.m_current = 2;
-            viewsSwitcher.goToView(2);
-        } else if(mainview.m_current===2) {
-            mainview.m_current = 3;
-            mainview.children[m_current].handleEnter();
-        }
+        mainview.children[m_current].handleDirDown();
+    }
+
+    Component.onCompleted: {
+        if(m_current===-1) { m_current = 0; }
+        mainview.children[m_current].handleEnter();
+        viewsSwitcher.pages[0].source = "ACIHomeView.qml";
     }
 
     // ==> UI elements
     // ===> Main Menu (m_current === 0)
     MainMenu {
         id: mainMenu;
-        objectName: "mainMenu"
         width: parent.width;
         height: Math.floor(parent.height*0.1);
         anchors.top: mainview.top;
-        //g_cssprefix: "/usr/share/arcomivi/";
-        g_cssprefix: "file:///C:/Qt/ws/Test/Test/"
+
+        onGoDown: {
+            handleLeave();
+            mainview.m_current = 1;
+            viewsSwitcher.handleEnter();
+        }
 
         onNavigateTo: {
 //            mainview.navigateTo(widget);
@@ -75,33 +82,43 @@ Item {
             }
         }
         onEnterMedia: {
-            loadMedia();
+            handleLeave();
             mainview.m_current = 1;
-            viewsSwitcher.pages[2].source = "";
-            viewsSwitcher.pages[1].source = "ACIMediaView.qml";
-            viewsSwitcher.goToView(1);
+            viewsSwitcher.enterMedia();
         }
         onEnterSettings: {
-            console.log("onEnterSettings");
+            handleLeave();
             mainview.m_current = 1;
-            viewsSwitcher.pages[0].visible = false;
-            viewsSwitcher.pages[1].source = "";
-            console.log("onEnterSettings: "+viewsSwitcher.pages[2]);
-            viewsSwitcher.pages[2].source = "ACISettingsView.qml";
-            console.log("onEnterSettings: "+viewsSwitcher.pages[2].source);
-            viewsSwitcher.goToView(2);
+            viewsSwitcher.enterSettings();
         }
     }
 
     //    (m_current === 1)
     ViewsSwitcher {
         id: viewsSwitcher
-        objectName: "viewsSwitcher"
         width: parent.width;
         property int m_viewsSwitcher_current: -1;
         height: Math.floor(parent.height*0.7);
         anchors {
             top: mainMenu.bottom;
+        }
+
+        function enterMedia(){
+            loadMedia();
+            viewsSwitcher.pages[2].source = "";
+            viewsSwitcher.pages[0].source = "";
+            viewsSwitcher.pages[1].source = "ACIMediaView.qml";
+            viewsSwitcher.goToView(1);
+        }
+        function enterSettings(){
+            viewsSwitcher.pages[0].source = "";
+            viewsSwitcher.pages[1].source = "";
+            viewsSwitcher.pages[2].source = "ACISettingsView.qml";
+            viewsSwitcher.goToView(2);
+        }
+
+        function handleEnter(){
+
         }
 
         function goToView(view){
@@ -111,16 +128,23 @@ Item {
             jumpTo(view);
         }
 
+        function handleDirUp(){
+            console.log("ViewsSwitcher.handleDirUp");
+            pages[m_viewsSwitcher_current].item.handleDirUp();
+        }
+
         function handleRot(direction){
             console.log("ViewsSwitcher.handleRot"+ direction);
             pages[m_viewsSwitcher_current].item.handleRot(direction);
         }
+
         function handleRelease() {
             pages[m_viewsSwitcher_current].item.handleRelease();
         }
 
         pages: [
             //0
+            //ACIHomeView
             //ACIMedia - list: Music, Video, Pictures, Radio, Television
             //ACIMusic - list: all from Music,
             //ACIVideo - list: all from Videos
@@ -129,12 +153,28 @@ Item {
             //ACITelevision - list: Streams, DVB
 
             //0
-            ACIHomeView{ },
+            Loader { id: homeViewLoader; anchors.fill: parent; },
             //1
-            Loader {id: mediaViewLoader; anchors.fill: parent; },
+            Loader { id: mediaViewLoader; anchors.fill: parent; },
             //2
             Loader { id: settingsViewLoader; anchors.fill: parent; }
         ]
+        Connections {
+            target: mediaViewLoader.item;
+            onGoUp: {
+                console.log("go up");
+                mainview.m_current = 0;
+                mainview.children[m_current].handleEnter();
+            }            
+        }
+        Connections {
+            target: settingsViewLoader.item;
+            onGoUp: {
+                console.log("go up");
+                mainview.m_current = 0;
+                mainview.children[m_current].handleEnter();
+            }
+        }
     }
 
     //    (m_current === 2)
@@ -143,15 +183,15 @@ Item {
         objectName: "viewSteerings"
         width: parent.width;
         height: Math.floor(parent.height*0.15);
-        //g_cssprefix: "/usr/share/arcomivi/";
-        g_cssprefix: "file:///C:/Qt/ws/Test/Test1/"
         anchors {
             bottom: statusBar.top;
         }
 
-        onVolup: mediaplayer.volume = mediaplayer.volume + 0.1;
-        onVoldown: mediaplayer.volume = mediaplayer.volume - 0.1;
-        onPlaypauseMusic: acimediaview.handleRelease();
+        onVolup: mainview.volup();
+        onVoldown: mainview.voldown();
+        onPrevMusic: mediaViewLoader.item.handlePrevious();
+        onPlaypauseMusic: mediaViewLoader.item.handleRelease();
+        onNextMusic: mediaViewLoader.item.handleNext();
         onBackToPrevious: { mainview.m_current = 2; }
 
     }
@@ -163,8 +203,6 @@ Item {
         objectName: "statusBar"
         width: parent.width;
         height: Math.floor(parent.height*0.05);
-        //g_cssprefix: "/usr/share/arcomivi/";
-        g_cssprefix: "file:///C:/Qt/ws/Test/Test/"
         anchors {
             bottom: mainview.bottom;
         }

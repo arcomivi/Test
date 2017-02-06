@@ -3,7 +3,7 @@ import QtQuick 2.5
 Rectangle {
     id: progressBar
     signal seek(int percentage)
-    color: Qt.rgba(0.0, 0.0, 0.0, 0.0);
+    color: "#636363"; //Qt.rgba(0.0, 0.0, 0.0, 0.0);
     property int borderWidth: 0
 
     function setMediaProgress(progr){
@@ -16,7 +16,7 @@ Rectangle {
         Rectangle {
             id: mediaProgressBar;
             visible: true; width: parent.width; height: parent.height;
-            color: Qt.rgba(0.0, 0.0, 0.0, 0.2); radius: 2;
+            color: Qt.rgba(0.0, 0.0, 0.0, 0.0); radius: 2;
             border.color: "orange"
             border.width: borderWidth
             Rectangle {

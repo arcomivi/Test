@@ -3,7 +3,7 @@ import QtQuick 2.5
 Rectangle {
     id: steerings    
     color: Qt.rgba(0.0, 0.0, 0.0, 0.0)
-    property string g_cssprefix
+//    property string g_cssprefix
     property Item currentSteering
 
     signal backToPrevious
