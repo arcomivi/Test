@@ -25,6 +25,7 @@ public slots:
     void updateMe();
     void loadMedia();
     void sendProgress(int progress);
+    void watchVideo();
 
 private:
     //structure with current and previous USB controller signal

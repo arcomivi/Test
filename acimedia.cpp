@@ -25,6 +25,7 @@ void ACIMedia::loadMedia()
 
     if(m_iMediaType==MEDIA_INITIAL){
         m_oMediaModel->addItem(Item("MEDIA_MUSIC", "Music", "music", "folder"));
+        m_oMediaModel->addItem(Item("MEDIA_RADIO", "Radio", "radio", "folder"));
         m_oMediaModel->addItem(Item("MEDIA_VIDEO", "Video", "video", "folder"));
         m_oMediaModel->addItem(Item("MEDIA_PICTURE", "Pictures", "picture", "folder"));
     } else if(m_iMediaType==MEDIA_MUSIC){
@@ -32,6 +33,12 @@ void ACIMedia::loadMedia()
             displayInitialMusic();
         } else if(m_iMusicType==MUSIC_ALL_SONGS){
             displayAllSongs();
+        }
+    } else if(m_iMediaType==MEDIA_VIDEO){
+        if(m_iVideoType==VIDEO_INITIAL){
+            displayInitialVideo();
+        } else if(m_iVideoType==VIDEO_ALL_VIDEOS){
+            displayAllVideos();
         }
     }
 
@@ -70,7 +77,16 @@ void ACIMedia::mediaModelClicked(Item itemClicked){
             m_bNewPlaylist = false;
         }
         m_oMusicPlayer->playPause(m_oMediaModel->getCurrentIndex()==0?0:m_oMediaModel->getCurrentIndex()-1);
-    } else if(name.compare("ALL_PICTURES")==0){
+    } else if(name.compare("MEDIA_VIDEO")==0){
+        m_iMediaType=MEDIA_VIDEO;
+        m_iVideoType=VIDEO_INITIAL;
+        emit mediaChanged();
+    } else if(name.compare("VIDEO_ALL_VIDEOS")==0){
+        m_iMediaType=MEDIA_VIDEO;
+        m_iVideoType=VIDEO_ALL_VIDEOS;
+        emit mediaChanged();
+    } else if(name.compare("VIDEO")==0){
+        emit watchVideo();
     }
     TRACE("exit");
 }
@@ -172,8 +188,18 @@ void ACIMedia::displayAllSongs(){
                     }
                 }
             }
-
-
         }
     }
+}
+
+void ACIMedia::displayInitialVideo(){
+    m_oMediaModel->removeRows(0, m_oMediaModel->rowCount());
+    m_oMediaModel->addItem(Item("MEDIA_INITIAL", "..", "music", "folder"));
+    m_oMediaModel->addItem(Item("VIDEO_ALL_VIDEOS", "All Videos", "video", "folder"));
+}
+
+void ACIMedia::displayAllVideos(){
+    m_oMediaModel->removeRows(0, m_oMediaModel->rowCount());
+    m_oMediaModel->addItem(Item("MEDIA_VIDEO","..","go_back_to_main", "left"));
+    m_oMediaModel->addItem(Item("VIDEO", "Wildlife", "C:\temp\Wildlife.wmv"));
 }

@@ -18,6 +18,7 @@ void ACIMainview::setQmlFile(QString qml){
 
     QObject::connect((QObject*)m_oMedia, SIGNAL(mediaChanged()), this , SLOT(loadMedia()));
     connect(m_oMedia, SIGNAL(sendProgress(int)), this , SLOT(sendProgress(int)));
+    connect(m_oMedia, SIGNAL(watchVideo()), this , SLOT(watchVideo()));
 
     QObject::connect((QObject*)this->rootObject(), SIGNAL(loadMedia()), this , SLOT(loadMedia()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(volup()), m_oMedia , SLOT(volup()));
@@ -38,6 +39,10 @@ void ACIMainview::loadMedia(){
 
 void ACIMainview::sendProgress(int progress){
     QMetaObject::invokeMethod((QObject*)this->rootObject(), "sendProgress", Q_ARG(QVariant, progress));
+}
+
+void ACIMainview::watchVideo(){
+    QMetaObject::invokeMethod((QObject*)this->rootObject(), "watchVideo", Q_ARG(QVariant, "Wildlife.wmv"));
 }
 
 

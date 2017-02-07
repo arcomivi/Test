@@ -17,9 +17,13 @@ public:
     void displayInitialMusic();
     void displayAllSongs();
 
+    void displayInitialVideo();
+    void displayAllVideos();
+
 signals:
     void mediaChanged();
     void sendProgress(int);
+    void watchVideo();
 
 public slots:
     void mediaModelClicked(Item itemClicked);
@@ -30,6 +34,7 @@ private:
     enum {
         MEDIA_INITIAL = -1,
         MEDIA_MUSIC,
+        MEDIA_RADIO,
         MEDIA_VIDEO,
         MEDIA_PICTURE
     };
@@ -44,9 +49,14 @@ private:
         MUSIC_ALL_ALBUMS,
         MUSIC_SONGS_ARTIST_ALBUM
     };
+    enum {
+        VIDEO_INITIAL = -1,
+        VIDEO_ALL_VIDEOS
+    };
 
     int m_iMediaType;
     int m_iMusicType;
+    int m_iVideoType;
     ACIListModel *m_oMediaModel;
     ACIMusicPlayer *m_oMusicPlayer;
     QMediaPlaylist *m_musicPlayingPlaylist;
