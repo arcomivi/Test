@@ -42,7 +42,7 @@ void ACIMainview::sendProgress(int progress){
 }
 
 void ACIMainview::watchVideo(){
-    QMetaObject::invokeMethod((QObject*)this->rootObject(), "watchVideo", Q_ARG(QVariant, "Wildlife.wmv"));
+    QMetaObject::invokeMethod((QObject*)this->rootObject(), "watchVideo", Q_ARG(QVariant, "file:///home/simon/Videos/Cud-niepamięci-cover.mp4"));
 }
 
 

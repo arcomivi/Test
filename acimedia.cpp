@@ -129,7 +129,11 @@ void ACIMedia::displayAllSongs(){
     m_songList.clear();
 
     m_oMediaModel->addItem(Item("MEDIA_MUSIC","..","go_back_to_main", "left"));
-
+//    m_oMediaModel->addItem(Item("SONG", "vertical_horizon", "/home/simon/Music/Vertical_Horizon-Burning_The_Days/12-vertical_horizon-even_now.ogg"));
+//    QUrl url = QUrl::fromLocalFile("/home/simon/Music/Vertical_Horizon-Burning_The_Days/12-vertical_horizon-even_now.ogg");
+//    QMediaContent media(url);
+//    m_songList.append(media);
+//    return;
     QString music = QDir::homePath() + "/Music";
     QDir musicDir(music);
     if(musicDir.exists()){
@@ -149,7 +153,7 @@ void ACIMedia::displayAllSongs(){
                     m_oMediaModel->addItem(Item("SONG", song.baseName(), song.absoluteFilePath()));
 
                     //build playlist at once
-                    QUrl url(song.absoluteFilePath());
+                    QUrl url = QUrl::fromLocalFile(song.absoluteFilePath());
                     QMediaContent media(url);
                     m_songList.append(media);
                 }
@@ -181,7 +185,7 @@ void ACIMedia::displayAllSongs(){
                             m_oMediaModel->addItem(Item("SONG", song.baseName(), song.absoluteFilePath()));
 
                             //build playlist at once
-                            QUrl url(song.absoluteFilePath());
+                            QUrl url = QUrl::fromLocalFile(song.absoluteFilePath());
                             QMediaContent media(url);
                             m_songList.append(media);
                         }
@@ -202,4 +206,5 @@ void ACIMedia::displayAllVideos(){
     m_oMediaModel->removeRows(0, m_oMediaModel->rowCount());
     m_oMediaModel->addItem(Item("MEDIA_VIDEO","..","go_back_to_main", "left"));
     m_oMediaModel->addItem(Item("VIDEO", "Wildlife", "C:\temp\Wildlife.wmv"));
+    m_oMediaModel->addItem(Item("VIDEO", "Cud Niepamieci", "file:///home/simon/Videos/Cud-niepamięci-cover.mp4"));
 }
