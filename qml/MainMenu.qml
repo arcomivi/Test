@@ -45,7 +45,7 @@ Item {
             break;
         case 1:
             mainMenuRow.children[m_current].setButtonReleased();
-//            rootMainMenu.enterNavigation();
+            rootMainMenu.enterNavigation();
             break;
         case 2:
             mainMenuRow.children[m_current].setButtonReleased();
@@ -147,7 +147,7 @@ Item {
             function setReleased() { setButtonReleased(); }
             onClicked: {
                 wasClicked = false;
-
+                enterNavigation();
             }
         }
 

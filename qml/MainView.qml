@@ -23,6 +23,8 @@ Item {
     //  ==> functions
     function watchVideo(name){
         console.log("watchVideo:"+name);
+        videoLoader.source = "ACIVideoView.qml";
+        videoLoader.item.setVideoSource(name);
     }
 
     function sendProgress(progress){
@@ -51,6 +53,7 @@ Item {
     }
 
     Component.onCompleted: {
+        console.log(Qt.platform.os);
         if(m_current===-1) { m_current = 0; }
         mainview.children[m_current].handleEnter();
         viewsSwitcher.goToView(0, "ACIHomeView.qml");
@@ -83,6 +86,11 @@ Item {
             mainview.m_current = 1;
             viewsSwitcher.enterSettings();
         }
+        onEnterNavigation: {
+            handleLeave();
+            mainview.m_current = 1;
+            viewsSwitcher.enterNavigation();
+        }
     }
 
     //(m_current === 1)
@@ -107,6 +115,11 @@ Item {
             handleLeave();
             mainview.m_current = 2;
             viewSteerings.handleEnter();
+        }
+
+        function enterNavigation(){
+            viewsSwitcher.goToView(3, "ACINaviView.qml");
+            viewSteerings.goToSteering(1);
         }
 
         function enterMedia(){
@@ -158,7 +171,9 @@ Item {
             //1
             Loader { id: mediaViewLoader; anchors.fill: parent; },
             //2
-            Loader { id: settingsViewLoader; anchors.fill: parent; }
+            Loader { id: settingsViewLoader; anchors.fill: parent; },
+            //3
+            Loader { id: naviViewLoader; anchors.fill: parent; }
         ]
         Connections {
             target: mediaViewLoader.item;
@@ -205,5 +220,5 @@ Item {
             bottom: mainview.bottom;
         }
     }
-
+    Loader { id: videoLoader; anchors.fill: parent; }
 }
