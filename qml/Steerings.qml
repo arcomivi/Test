@@ -57,8 +57,8 @@ Rectangle {
     signal connect
 
     Component.onCompleted: {
-        steerSwitcher.jumpTo(0);
-        currentSteering = steerSwitcher.pages[0];        
+        steerSwitcher.jumpTo(1);
+        currentSteering = steerSwitcher.pages[1];
     }
 
     //function
@@ -88,6 +88,7 @@ Rectangle {
     }
 
     function handleEnter(){
+        //console.log("steerings.handleEnter");
         currentSteering.handleEnter();
     }
 
@@ -108,7 +109,7 @@ Rectangle {
     }
 
     function switchTo(idx){
-        steerSwitcher.switchTo(idx);
+        steerSwitcher.jumpTo(idx);
     }
 
     function goToSteering(category) {
@@ -120,7 +121,7 @@ Rectangle {
             console.log(steerSwitcher.pages.length);
             category = steerSwitcher.pages.length-2;
         }
-        steerSwitcher.switchTo(category);
+        steerSwitcher.jumpTo(category);
         currentSteering = steerSwitcher.pages[category];
     }
 

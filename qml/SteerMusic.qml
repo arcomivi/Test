@@ -1,9 +1,8 @@
 import QtQuick 2.5
 //import QtQuick.Controls 1.4
 
-Rectangle {
+Item {
     id: rootSteerMusic
-    color: Qt.rgba(0.0, 0.0, 0.0, 0.0)
     width: parent.width
     height: parent.height
 

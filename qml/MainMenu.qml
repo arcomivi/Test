@@ -15,8 +15,7 @@ Item {
     signal enterNavigation
     signal enterSync
     signal enterSettings
-    signal navigateTo(int widget);
-    signal goDown
+
 
     // ==> functions
 //    function setGeometry(vwidth, vheight){
@@ -47,7 +46,6 @@ Item {
         case 1:
             mainMenuRow.children[m_current].setButtonReleased();
 //            rootMainMenu.enterNavigation();
-            rootMainMenu.navigateTo(3);//3=ViewNavigation
             break;
         case 2:
             mainMenuRow.children[m_current].setButtonReleased();
@@ -56,7 +54,6 @@ Item {
         case 3:
             mainMenuRow.children[m_current].setButtonReleased();
             rootMainMenu.enterSettings();
-//            rootMainMenu.navigateTo(9);//9=ViewSettings
             break;
         }
     }
@@ -105,8 +102,7 @@ Item {
         mainMenuRow.children[m_current].setButtonActive();
     }
 
-    function handleDirUp(){ goDown(); }
-    function handleDirDown(){ }
+
 
     Row {
         id: mainMenuRow;
@@ -151,7 +147,7 @@ Item {
             function setReleased() { setButtonReleased(); }
             onClicked: {
                 wasClicked = false;
-                rootMainMenu.navigateTo(3);
+
             }
         }
 

@@ -21,8 +21,11 @@ Item {
 
 
     //  ==> functions
+    function watchVideo(name){
+        console.log("watchVideo:"+name);
+    }
+
     function sendProgress(progress){
-        console.log("progress: "+progress);
         viewSteerings.setMusicProgress(progress);
     }
 
@@ -50,7 +53,7 @@ Item {
     Component.onCompleted: {
         if(m_current===-1) { m_current = 0; }
         mainview.children[m_current].handleEnter();
-        viewsSwitcher.pages[0].source = "ACIHomeView.qml";
+        viewsSwitcher.goToView(0, "ACIHomeView.qml");
     }
 
     // ==> UI elements
@@ -61,31 +64,20 @@ Item {
         height: Math.floor(parent.height*0.1);
         anchors.top: mainview.top;
 
-        onGoDown: {
+        function handleDirUp(){}
+        function handleDirDown(){
+            console.log("mainMenu.handleDirDown");
             handleLeave();
             mainview.m_current = 1;
             viewsSwitcher.handleEnter();
         }
 
-        onNavigateTo: {
-//            mainview.navigateTo(widget);
-            switch(widget){
-            case 0:
-                break;
-            case 3:
-
-                break;
-            case 9:
-                //update
-                mainview.update();
-                break;
-            }
-        }
         onEnterMedia: {
             handleLeave();
             mainview.m_current = 1;
             viewsSwitcher.enterMedia();
         }
+
         onEnterSettings: {
             handleLeave();
             mainview.m_current = 1;
@@ -93,48 +85,57 @@ Item {
         }
     }
 
-    //    (m_current === 1)
+    //(m_current === 1)
     ViewsSwitcher {
         id: viewsSwitcher
         width: parent.width;
-        property int m_viewsSwitcher_current: -1;
         height: Math.floor(parent.height*0.7);
+
+        property int m_viewsSwitcher_current: -1;
+
         anchors {
             top: mainMenu.bottom;
         }
 
+        function handleDirUp(){
+            handleLeave();
+            mainview.m_current = 0;
+            mainMenu.handleEnter();
+        }
+
+        function handleDirDown(){
+            handleLeave();
+            mainview.m_current = 2;
+            viewSteerings.handleEnter();
+        }
+
         function enterMedia(){
             loadMedia();
-            viewsSwitcher.pages[2].source = "";
-            viewsSwitcher.pages[0].source = "";
-            viewsSwitcher.pages[1].source = "ACIMediaView.qml";
-            viewsSwitcher.goToView(1);
+            viewsSwitcher.goToView(1, "ACIMediaView.qml");
+            viewSteerings.goToSteering(0);
         }
         function enterSettings(){
-            viewsSwitcher.pages[0].source = "";
-            viewsSwitcher.pages[1].source = "";
-            viewsSwitcher.pages[2].source = "ACISettingsView.qml";
-            viewsSwitcher.goToView(2);
+            viewsSwitcher.goToView(2, "ACISettingsView.qml");
+            viewSteerings.goToSteering(1);
         }
 
         function handleEnter(){
+            //console.log("viewsSwitcher.handleEnter");
+        }
+
+        function handleLeave(){
 
         }
 
-        function goToView(view){
+        function goToView(view, qmlname){
             m_viewsSwitcher_current = view;
-            console.log("viewsSwitcher-goToView: " + view +" ("+m_current+")");
-            console.log(pages[view]);
-            jumpTo(view);
-        }
-
-        function handleDirUp(){
-            console.log("ViewsSwitcher.handleDirUp");
-            pages[m_viewsSwitcher_current].item.handleDirUp();
+            //console.log("viewsSwitcher-goToView: " + view +" ("+m_current+")");
+            //console.log(pages[view]);
+            jumpTo(view, qmlname);
         }
 
         function handleRot(direction){
-            console.log("ViewsSwitcher.handleRot"+ direction);
+            //console.log("ViewsSwitcher.handleRot"+ direction);
             pages[m_viewsSwitcher_current].item.handleRot(direction);
         }
 
@@ -177,10 +178,9 @@ Item {
         }
     }
 
-    //    (m_current === 2)
+    //(m_current === 2)
     Steerings {
         id: viewSteerings
-        objectName: "viewSteerings"
         width: parent.width;
         height: Math.floor(parent.height*0.15);
         anchors {
@@ -193,14 +193,12 @@ Item {
         onPlaypauseMusic: mediaViewLoader.item.handleRelease();
         onNextMusic: mediaViewLoader.item.handleNext();
         onBackToPrevious: { mainview.m_current = 2; }
-
     }
 
     //status bar
-    //    (m_current === 3)
+    //(m_current === 3)
     StatusBar {
         id: statusBar;
-        objectName: "statusBar"
         width: parent.width;
         height: Math.floor(parent.height*0.05);
         anchors {
