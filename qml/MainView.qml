@@ -18,11 +18,20 @@ Item {
     signal loadMedia
     signal volup
     signal voldown
+    signal screenSelected(int screen)
 
 
     //  ==> functions
+    function chooseScreen(){
+        console.log("chooseScreen..........................");
+        m_current = 5;
+        genericLoader.source = "";
+        genericLoader.source = "ACISelectScreen.qml";
+    }
+
     function watchVideo(name){
         console.log("watchVideo:"+name);
+        m_current = 4;
         videoLoader.source = "ACIVideoView.qml";
         videoLoader.item.setVideoSource(name);
     }
@@ -98,12 +107,9 @@ Item {
         id: viewsSwitcher
         width: parent.width;
         height: Math.floor(parent.height*0.7);
+        anchors.top: mainMenu.bottom;
 
         property int m_viewsSwitcher_current: -1;
-
-        anchors {
-            top: mainMenu.bottom;
-        }
 
         function handleDirUp(){
             handleLeave();
@@ -220,5 +226,25 @@ Item {
             bottom: mainview.bottom;
         }
     }
-    Loader { id: videoLoader; anchors.fill: parent; }
+    //(m_current === 4)
+    Loader { id: videoLoader; anchors.fill: parent;
+        function handleRot(direction){
+            videoLoader.item.handleRot(direction);
+        }
+    }
+    //(m_current === 5)
+    Loader { id: genericLoader; anchors.fill: parent;
+        function handleRot(direction){
+            genericLoader.item.handleRot(direction);
+        }
+    }
+    Connections {
+        target: genericLoader.item;
+        onScreenSelected: {
+            console.log("onScreenSelected: "+screen);
+            mainview.screenSelected(screen);
+            genericLoader.source = "";
+            m_current = 1;
+        }
+    }
 }
