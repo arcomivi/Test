@@ -55,24 +55,10 @@ int main(int argc, char *argv[]){
 
     ACIConfig::instance()->initConfig();
 
-
-
-//==> read stylesheet data OBSOLETE
-//    QFile file(ACIConfig::instance()->getCssFile());
-//    file.open(QFile::ReadOnly);
-//    QString styleSheet = QLatin1String(file.readAll());
-
-//    ACIDialog w;
-//    w.setWindowFlags(Qt::WindowStaysOnTopHint);
-
-//    w.showFullScreen();
-//    w.show();
     //w.setAttribute(Qt::WA_TranslucentBackground);
     //w.setAutoFillBackground(false);
     //w.setAttribute(Qt::WA_OpaquePaintEvent, true);
     //w.setAttribute(Qt::WA_NoSystemBackground);
-//    qApp->setStyleSheet(styleSheet);
-//    a.setStyleSheet("background-image: /usr/share/arcomivi/css/common/wallpaper640x480.png;");
 
 
     TRACE_CONSOLE("Start...READY=1");
@@ -85,19 +71,17 @@ int main(int argc, char *argv[]){
     oMainview->setFlags(Qt::FramelessWindowHint);
     oMainview->setResizeMode(QQuickView::SizeRootObjectToView);
 
-    oMainview->setGeometry(
-                           700,
+    oMainview->setGeometry(700,
                            50,
                            640,
                            480
                            );
-//    oMainview->setGeometry(
-//                           0,
+//    oMainview->setGeometry(0,
 //                           0,
 //                           desktopWidget->screenGeometry(0).width(),
 //                           desktopWidget->screenGeometry(0).height()
 //                           );
     oMainview->show();
-
+//    qDebug() << "S C R E E N S: " << a.screens().count();
     return a.exec();
 }

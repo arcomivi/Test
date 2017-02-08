@@ -184,7 +184,7 @@ void ACIMusicPlayer::playPause(int index){
         m_oPlayer->play();
 
     } else {
-        TRACE("neither playing nor pause");
+        TRACE("neither playing nor paused");
         m_oPlayer->stop();
         m_oPlayer->play();
         emit tickSong("00:00");

@@ -23,7 +23,7 @@ public:
 signals:
     void mediaChanged();
     void sendProgress(int);
-    void watchVideo();
+    void watchVideo(QString video);
 
 public slots:
     void mediaModelClicked(Item itemClicked);

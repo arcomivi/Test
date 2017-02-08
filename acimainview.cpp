@@ -14,11 +14,15 @@ ACIMainview::ACIMainview(QQuickView *parent) :
 
 void ACIMainview::setQmlFile(QString qml){
     m_oMedia = new ACIMedia();
+    m_oVideoView = 0;
     this->setSource(QUrl(qml));
+    m_oCurrentView = (QObject*)this->rootObject();
 
     QObject::connect((QObject*)m_oMedia, SIGNAL(mediaChanged()), this , SLOT(loadMedia()));
     connect(m_oMedia, SIGNAL(sendProgress(int)), this , SLOT(sendProgress(int)));
-    connect(m_oMedia, SIGNAL(watchVideo()), this , SLOT(watchVideo()));
+    connect(m_oMedia, SIGNAL(watchVideo(QString)), this , SLOT(watchVideo(QString)));
+
+    QObject::connect((QObject*)this->rootObject(), SIGNAL(screenSelected(int)), this , SLOT(screenSelected(int)));
 
     QObject::connect((QObject*)this->rootObject(), SIGNAL(loadMedia()), this , SLOT(loadMedia()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(volup()), m_oMedia , SLOT(volup()));
@@ -41,11 +45,29 @@ void ACIMainview::sendProgress(int progress){
     QMetaObject::invokeMethod((QObject*)this->rootObject(), "sendProgress", Q_ARG(QVariant, progress));
 }
 
-void ACIMainview::watchVideo(){
-    QMetaObject::invokeMethod((QObject*)this->rootObject(), "watchVideo", Q_ARG(QVariant, "file:///home/simon/Videos/Cud-niepamięci-cover.mp4"));
+void ACIMainview::watchVideo(QString video){
+//    QMetaObject::invokeMethod((QObject*)this->rootObject(), "watchVideo", Q_ARG(QVariant, video));
+    QMetaObject::invokeMethod((QObject*)this->rootObject(), "chooseScreen", Qt::DirectConnection);
 }
 
+void ACIMainview::screenSelected(int screen){
+    if(!m_oVideoView){
+        m_oVideoView  = new ACIVideoView();
+        m_oVideoView->setQmlFile(ACIConfig::instance()->getQmlPrefix()+"ACIVideoView.qml");
+        m_oVideoView->setFlags(Qt::FramelessWindowHint);
+        m_oVideoView->setResizeMode(QQuickView::SizeRootObjectToView);
 
+        QObject::connect((QObject*)m_oVideoView->rootObject(), SIGNAL(exitVideo()), this , SLOT(exitVideo()));
+    }
+    m_oVideoView->setGeometry(600,150,640,480);
+    m_oVideoView->show();
+    m_oVideoView->setScreen(qApp->screens()[screen]);
+}
+
+void ACIMainview::exitVideo(){
+    m_oVideoView->destroy();
+    m_oVideoView = 0;
+}
 
 void ACIMainview::keyPressEvent(QKeyEvent *e){
     TRACE(e->key());
@@ -81,11 +103,11 @@ void ACIMainview::keyPressEvent(QKeyEvent *e){
         return;
     }
     if(e->key() == Qt::Key_M){ //ROT1
-        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 0));
+        QMetaObject::invokeMethod(m_oCurrentView, "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 0));
         return;
     }
     if(e->key() == Qt::Key_N){ //ROT2
-        QMetaObject::invokeMethod((QObject*)this->rootObject(), "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 1));
+        QMetaObject::invokeMethod(m_oCurrentView, "handleRot", Qt::DirectConnection, Q_ARG(QVariant, 1));
         return;
     }
 

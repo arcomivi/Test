@@ -4,6 +4,7 @@
 #include "aciconfig.h"
 #include "aciusbcontroller.h"
 #include "acimedia.h"
+#include "acivideoview.h"
 
 class ACIMainview : public QQuickView
 {
@@ -25,7 +26,9 @@ public slots:
     void updateMe();
     void loadMedia();
     void sendProgress(int progress);
-    void watchVideo();
+    void watchVideo(QString);
+    void screenSelected(int);
+    void exitVideo();
 
 private:
     //structure with current and previous USB controller signal
@@ -33,6 +36,8 @@ private:
     bool m_bCtrlFirstRun;
     QString m_sPreviousSignal;
     ACIMedia *m_oMedia;
+    ACIVideoView *m_oVideoView;
+    QObject *m_oCurrentView;
 };
 
 #endif // ACIMAINVIEW_H
