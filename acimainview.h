@@ -30,6 +30,7 @@ public slots:
     void screenSelected(int);
     void exitVideo();
 
+
 private:
     //structure with current and previous USB controller signal
     ACIUsbCtrlSignals m_sCtrl, m_sCtrlPrev;

@@ -12,6 +12,11 @@ public:
     ACIVideoView(QQuickView *parent = 0);
     void setQmlFile(QString qml);
     void keyPressEvent(QKeyEvent *e);
+    QString m_sCurrentVideo;
+public slots:
+    void playVideo();
+private:
+
 };
 
 #endif // ACIVIDEOVIEW_H

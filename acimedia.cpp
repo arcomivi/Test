@@ -86,6 +86,7 @@ void ACIMedia::mediaModelClicked(Item itemClicked){
         m_iVideoType=VIDEO_ALL_VIDEOS;
         emit mediaChanged();
     } else if(name.compare("VIDEO")==0){
+        m_sCurrentVideo = itemClicked.value();
         emit watchVideo(itemClicked.value());
     }
     TRACE("exit");
@@ -206,5 +207,8 @@ void ACIMedia::displayAllVideos(){
     m_oMediaModel->removeRows(0, m_oMediaModel->rowCount());
     m_oMediaModel->addItem(Item("MEDIA_VIDEO","..","go_back_to_main", "left"));
     m_oMediaModel->addItem(Item("VIDEO", "Wildlife", "C:/temp/Wildlife.wmv"));
+    m_oMediaModel->addItem(Item("VIDEO", "Wildlife", "C:/temp/Wildlife.wmv"));
+    m_oMediaModel->addItem(Item("VIDEO", "Cud Niepamieci", "file:///home/simon/Videos/Cud-niepamięci-cover.mp4"));
+    m_oMediaModel->addItem(Item("VIDEO", "Cud Niepamieci", "file:///home/simon/Videos/Cud-niepamięci-cover.mp4"));
     m_oMediaModel->addItem(Item("VIDEO", "Cud Niepamieci", "file:///home/simon/Videos/Cud-niepamięci-cover.mp4"));
 }

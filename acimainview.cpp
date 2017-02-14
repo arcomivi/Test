@@ -15,25 +15,25 @@ ACIMainview::ACIMainview(QQuickView *parent) :
 void ACIMainview::setQmlFile(QString qml){
     m_oMedia = new ACIMedia();
     m_oVideoView = 0;
+
     this->setSource(QUrl(qml));
     m_oCurrentView = (QObject*)this->rootObject();
 
-    QObject::connect((QObject*)m_oMedia, SIGNAL(mediaChanged()), this , SLOT(loadMedia()));
+    //signals from objects:
+    connect(m_oMedia, SIGNAL(mediaChanged()), this , SLOT(loadMedia()));
     connect(m_oMedia, SIGNAL(sendProgress(int)), this , SLOT(sendProgress(int)));
     connect(m_oMedia, SIGNAL(watchVideo(QString)), this , SLOT(watchVideo(QString)));
 
-    QObject::connect((QObject*)this->rootObject(), SIGNAL(screenSelected(int)), this , SLOT(screenSelected(int)));
-
-    QObject::connect((QObject*)this->rootObject(), SIGNAL(loadMedia()), this , SLOT(loadMedia()));
+    //signals from QML UI:
     QObject::connect((QObject*)this->rootObject(), SIGNAL(volup()), m_oMedia , SLOT(volup()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(voldown()), m_oMedia , SLOT(voldown()));
-
+    QObject::connect((QObject*)this->rootObject(), SIGNAL(screenSelected(int)), this , SLOT(screenSelected(int)));
+    QObject::connect((QObject*)this->rootObject(), SIGNAL(loadMedia()), this , SLOT(loadMedia()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(update()), this , SLOT(updateMe()));
     QObject::connect((QObject*)this->rootObject(), SIGNAL(navigateTo(int)), this , SLOT(navigateTo(int)));
+
     QObject::connect(ACIUsbController::getInstance(), SIGNAL(broadcastCtrlEvent(QString)), this, SLOT(onBroadcastCtrlEvent(QString)));
     QTimer::singleShot(500, ACIUsbController::getInstance(), SLOT(connectCtrlSignal()));
-
-//    this->rootContext()->setContextProperty(QLatin1String("listModel"), QVariant::fromValue(model));
 }
 
 void ACIMainview::loadMedia(){
@@ -46,7 +46,6 @@ void ACIMainview::sendProgress(int progress){
 }
 
 void ACIMainview::watchVideo(QString video){
-//    QMetaObject::invokeMethod((QObject*)this->rootObject(), "watchVideo", Q_ARG(QVariant, video));
     QMetaObject::invokeMethod((QObject*)this->rootObject(), "chooseScreen", Qt::DirectConnection);
 }
 
@@ -56,13 +55,16 @@ void ACIMainview::screenSelected(int screen){
         m_oVideoView->setQmlFile(ACIConfig::instance()->getQmlPrefix()+"ACIVideoView.qml");
         m_oVideoView->setFlags(Qt::FramelessWindowHint);
         m_oVideoView->setResizeMode(QQuickView::SizeRootObjectToView);
+        m_oVideoView->m_sCurrentVideo = m_oMedia->getCurrentVideo();
 
-        QObject::connect((QObject*)m_oVideoView->rootObject(), SIGNAL(exitVideo()), this , SLOT(exitVideo()));
+        connect((QObject*)m_oVideoView->rootObject(), SIGNAL(exitVideo()), this , SLOT(exitVideo()));
+
     }
-    m_oVideoView->setGeometry(600,150,640,480);
+    m_oVideoView->setGeometry(650,150,640,480);
     m_oVideoView->show();
     m_oVideoView->setScreen(qApp->screens()[screen]);
 }
+
 
 void ACIMainview::exitVideo(){
     m_oVideoView->destroy();

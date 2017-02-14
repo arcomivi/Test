@@ -19,6 +19,7 @@ public:
 
     void displayInitialVideo();
     void displayAllVideos();
+    QString getCurrentVideo(){ return m_sCurrentVideo; }
 
 signals:
     void mediaChanged();
@@ -57,6 +58,7 @@ private:
     int m_iMediaType;
     int m_iMusicType;
     int m_iVideoType;
+    QString m_sCurrentVideo;
     ACIListModel *m_oMediaModel;
     ACIMusicPlayer *m_oMusicPlayer;
     QMediaPlaylist *m_musicPlayingPlaylist;
