@@ -77,6 +77,10 @@ public:
     QString getQmlPrefix() {         return ACI_QML;    }
     QString getCssPrefix() {         return ACI_CSS;    }
     QString version() { return ACI_VERSION; }
+    int getx(){ return m_config.value("x").toInt(); }
+    int gety(){ return m_config.value("y").toInt(); }
+    int getw(){ return m_config.value("w").toInt(); }
+    int geth(){ return m_config.value("h").toInt(); }
 signals:
 
 public slots:

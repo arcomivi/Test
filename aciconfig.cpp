@@ -108,7 +108,7 @@ bool ACIConfigSaxHandler::endElement(const QString & /* namespaceURI */,
  */
 bool ACIConfigSaxHandler::characters(const QString &str){
     TRACE(str);
-    if(!m_curentNode.contains(QRegExp("cssfile|loglevel|logconsole|setOverrideCursor"))) return true;
+    if(!m_curentNode.contains(QRegExp("cssfile|loglevel|logconsole|setOverrideCursor|x|y|w|h"))) return true;
     TRACE(QString("Inserting: %1 - %2 ").arg(m_curentNode).arg(str));
     m_config.insert(m_curentNode, str);
     return true;

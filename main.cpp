@@ -71,16 +71,10 @@ int main(int argc, char *argv[]){
     oMainview->setFlags(Qt::FramelessWindowHint);
     oMainview->setResizeMode(QQuickView::SizeRootObjectToView);
 
-    oMainview->setGeometry(700,
-                           50,
-                           640,
-                           480
-                           );
-//    oMainview->setGeometry(0,
-//                           0,
-//                           desktopWidget->screenGeometry(0).width(),
-//                           desktopWidget->screenGeometry(0).height()
-//                           );
+    oMainview->setGeometry(ACIConfig::instance()->getx(),
+                           ACIConfig::instance()->gety(),
+                           ACIConfig::instance()->getw()==0?desktopWidget->screenGeometry(0).width():ACIConfig::instance()->getw(),
+                           ACIConfig::instance()->geth()==0?desktopWidget->screenGeometry(0).height():ACIConfig::instance()->geth());
     oMainview->show();
 //    qDebug() << "S C R E E N S: " << a.screens().count();
     return a.exec();
