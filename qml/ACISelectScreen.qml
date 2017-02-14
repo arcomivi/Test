@@ -3,6 +3,11 @@ import QtQuick 2.0
 Item {
     id: screenSelector
     signal screenSelected(int screen)
+
+    function handleRelease(){
+        screenSelected(0);
+    }
+
     Rectangle { color: "#636363"; anchors.fill: parent; }
     Text {
         id: screenSelectorText

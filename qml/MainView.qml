@@ -237,6 +237,9 @@ Item {
         function handleRot(direction){
             genericLoader.item.handleRot(direction);
         }
+        function handleRelease(){
+            genericLoader.item.handleRelease();
+        }
     }
     Connections {
         target: genericLoader.item;

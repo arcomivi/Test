@@ -4,15 +4,28 @@ import QtMultimedia 5.5
 Item {
     id: videoView;
     signal exitVideo
+    signal completedLoading
+
+    function playVideo(){
+        video.play();
+    }
 
     function setVideoSource(name){
-        video.source = name;
-        video.play();
+        video.source = name;        
     }
 
     function handleDirUp(){
         video.stop();
         exitVideo();
+    }
+
+    function handleDirDown(){
+        videoSteering.visible = true;
+        videoSteeringTimer.restart();
+    }
+
+    function handleRelease(){
+        completedLoading();
     }
 
     function handleRot(direction){
@@ -23,7 +36,9 @@ Item {
             video.seek(video.position - 2000)
         }
     }
-
+    Timer { id: videoSteeringTimer; repeat: false; interval: 3000;
+        onTriggered: videoSteering.visible = false;
+    }
     Rectangle { anchors.fill: parent; color: "black" }
 
     Video {
@@ -32,7 +47,8 @@ Item {
     }
 
     Rectangle {
-        color: Qt.rgba(0.0,0.0,0.0,0.5);
+        id: videoSteering;
+        color: Qt.rgba(0.0,0.0,0.0,0.8);
 
         Text {
             id: foo
@@ -42,11 +58,17 @@ Item {
         }
         anchors.bottom: parent.bottom;
         width: parent.width;
-        height: 100;
-    }
+        height: 50;
+        visible: false;
 
-    Component.onCompleted: {
-        video.source = "C:/temp/Wildlife.wmv";
-        video.play();
+    }
+    MouseArea {
+        anchors.fill: parent;
+        onClicked: {
+            console.log("parent video clicked")
+            videoSteering.visible = true;
+            videoSteeringTimer.restart();
+            video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play();
+        }
     }
 }
