@@ -50,9 +50,14 @@ private:
 private Q_SLOTS:
     void stateChanged(QMediaPlayer::State newState);
     void tick(qint64 time);
-    void sourceChanged(QMediaContent);
+    void mediaChanged(QMediaContent);
+    void error(QMediaPlayer::Error);
     void metaStateChanged(QMediaPlayer::MediaStatus newState);
     void aboutToFinish();
+
+    void currentIndexChanged(int);
+    void mediaChanged(int,int);
+    void currentMediaChanged(QMediaContent);
 
 };
 

@@ -13,7 +13,7 @@ ACILogger::~ACILogger(){
  */
 void ACILogger::log(QString log){
 
-    if(m_bConsoleOut) TRACE_CONSOLE(log);
+    if(m_bConsoleOut) qDebug() << log;
 
     //for 0 do nothing
     if(m_iLogLevel == 0 || !m_bLogOpened) return;

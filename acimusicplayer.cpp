@@ -11,10 +11,9 @@ ACIMusicPlayer::ACIMusicPlayer(QObject *parent) :
     //second tick
     connect(m_oPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(tick(qint64)));
     connect(m_oPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(stateChanged(QMediaPlayer::State)));
-    connect(m_oPlayer, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
-            this, SLOT(metaStateChanged(QMediaPlayer::MediaStatus)));
-    connect(m_oPlayer, SIGNAL(mediaChanged(QMediaContent)),
-            this, SLOT(sourceChanged(QMediaContent)));
+    connect(m_oPlayer, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this, SLOT(metaStateChanged(QMediaPlayer::MediaStatus)));
+    connect(m_oPlayer, SIGNAL(mediaChanged(QMediaContent)), this, SLOT(mediaChanged(QMediaContent)));
+    connect(m_oPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(error(QMediaPlayer::Error)));
 
     m_bPlaylistChanged=false;
     volumeStep = 10;
@@ -38,7 +37,7 @@ void ACIMusicPlayer::tick(qint64 time){
     }
     emit sendProgress(progress);
 
-    TRACE("exit");
+//    TRACE("exit");
 }
 
 void ACIMusicPlayer::stateChanged(QMediaPlayer::State){
@@ -66,6 +65,9 @@ void ACIMusicPlayer::setPlaylistIndex(int index){
 void ACIMusicPlayer::setPlaylist(QMediaPlaylist *playlist){
     m_bPlaylistChanged=true;
     m_oPlayer->setPlaylist(playlist);
+    connect(m_oPlayer->playlist(), SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged(int)));
+    connect(m_oPlayer->playlist(), SIGNAL(mediaChanged(int,int)), this, SLOT(mediaChanged(int,int)));
+    connect(m_oPlayer->playlist(), SIGNAL(currentMediaChanged(QMediaContent)), this, SLOT(currentMediaChanged(QMediaContent)));
 }
 
 /**
@@ -111,7 +113,7 @@ void ACIMusicPlayer::metaStateChanged(QMediaPlayer::MediaStatus newState){
 /**
  * Signals that the current playing content will be obtained from media.
  */
-void ACIMusicPlayer::sourceChanged(QMediaContent source){
+void ACIMusicPlayer::mediaChanged(QMediaContent source){
     int currentIndex = m_oPlayer->playlist()->currentIndex();
     TRACE(QString("enter - currentIndex: %1").arg(currentIndex));
     if(m_oPlayer->isMetaDataAvailable()){
@@ -124,9 +126,40 @@ void ACIMusicPlayer::sourceChanged(QMediaContent source){
     TRACE("exit");
 }
 
+void ACIMusicPlayer::error(QMediaPlayer::Error error){
+    switch (error) {
+    case QMediaPlayer::NoError:
+        TRACE("QMediaPlayer::NoError");
+        break;
+    case QMediaPlayer::ResourceError:
+        TRACE("QMediaPlayer::ResourceError");
+        break;
+    case QMediaPlayer::FormatError:
+        TRACE("QMediaPlayer::FormatError");
+        break;
+    default:
+        break;
+    }
+    m_oPlayer->stop();
+}
+
 void ACIMusicPlayer::aboutToFinish(){
     TRACE(" finishing song ...");
     emit songAboutToFinish();
+}
+
+void ACIMusicPlayer::currentIndexChanged(int index)
+{
+    TRACE(QString("currentIndexChanged: %0").arg(index));
+}
+
+void ACIMusicPlayer::mediaChanged(int start, int end)
+{
+    TRACE(QString("mediaChanged: %0 -> %1").arg(start).arg(end));
+}
+
+void ACIMusicPlayer::currentMediaChanged(QMediaContent mediaContent){
+    TRACE(QString("currentMediaChanged: %0 ").arg(mediaContent.canonicalUrl().toString()));
 }
 
 
@@ -159,7 +192,7 @@ void ACIMusicPlayer::playPause(int index){
     //check if index == current index
     int currIndex = m_oPlayer->playlist()->currentIndex();
     if(currIndex != index){
-        TRACE(QString("current index %1 does not equal index %1 -> stop and play").arg(currIndex).arg(index));
+        TRACE(QString("current index %0 does not equal index %1 -> stop and play").arg(currIndex).arg(index));
         m_oPlayer->stop();
         m_oPlayer->playlist()->setCurrentIndex(index);
         m_oPlayer->play();
@@ -167,7 +200,7 @@ void ACIMusicPlayer::playPause(int index){
         emit sendProgress(0);
         return;
     }
-    TRACE(QString("current index %1 equals index %1 -> pause or play").arg(currIndex).arg(index));
+    TRACE(QString("current index %0 equals index %1 -> pause or play").arg(currIndex).arg(index));
     if (wasPlaying){
         TRACE("was playing -> pause");
         //        m_oPlayer->stop();
