@@ -6,7 +6,7 @@ Rectangle {
 //    property string g_cssprefix
     property Item currentSteering
 
-    signal backToPrevious
+    signal goUp
     signal steerSwitched(int current)
 
     //for music, video, radio
@@ -68,7 +68,7 @@ Rectangle {
 
     function handleDirUp(){
         handleLeave();
-        steerings.backToPrevious();
+        steerings.goUp();
     }
 
     function handleRot(direction){

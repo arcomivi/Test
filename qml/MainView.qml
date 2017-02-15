@@ -143,7 +143,7 @@ Item {
         }
 
         function handleLeave(){
-
+            //console.log("viewsSwitcher.handleLeave");
         }
 
         function goToView(view, qmlname){
@@ -213,7 +213,7 @@ Item {
         onPrevMusic: mediaViewLoader.item.handlePrevious();
         onPlaypauseMusic: mediaViewLoader.item.handleRelease();
         onNextMusic: mediaViewLoader.item.handleNext();
-        onBackToPrevious: { mainview.m_current = 2; }
+        onGoUp: { mainview.m_current = 1; }
     }
 
     //status bar
