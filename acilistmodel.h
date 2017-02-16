@@ -16,6 +16,7 @@ public:
     QString icon() const { return m_icon; }
     QString value2() const { return m_value2; }
 
+    void setValue2(QString data) { m_value2 = data; }
 private:
     QString m_name;
     QString m_descr;
@@ -44,8 +45,10 @@ public:
     void removeItem(const QString &);
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     QHash<int,QByteArray> roleNames() const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
     int getCurrentIndex(){ return m_currentIndex; }
 
 

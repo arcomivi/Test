@@ -29,6 +29,7 @@ Q_SIGNALS:
     void sendTitle(QString);
     void sendProgress(int);
     void songAboutToFinish(); //signal emited when song is about to finish
+    void currentListIndexChanged(int);
 
 public Q_SLOTS:
     void playNext();

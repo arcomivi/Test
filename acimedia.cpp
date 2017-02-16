@@ -11,7 +11,9 @@ ACIMedia::ACIMedia(QObject *parent) : QObject(parent){
     m_bNewPlaylist = true;
 
     connect(m_oMediaModel, SIGNAL(itemClicked(Item)), this, SLOT(mediaModelClicked(Item)));
+
     connect(m_oMusicPlayer, SIGNAL(sendProgress(int)), this, SIGNAL(sendProgress(int)));
+    connect(m_oMusicPlayer, SIGNAL(currentListIndexChanged(int)), this, SLOT(currentListIndexChanged(int)));
 }
 
 ACIListModel *ACIMedia::getModel()
@@ -50,6 +52,19 @@ void ACIMedia::volup(){
 
 void ACIMedia::voldown(){
     m_oMusicPlayer->volumeDown();
+}
+
+void ACIMedia::currentListIndexChanged(int listIndex){
+
+    if(m_iMediaType!=MEDIA_MUSIC && m_iMusicType!=MUSIC_ALL_SONGS){
+        return;
+    }
+    TRACE(QString("currentListIndexChanged: %1").arg(listIndex));
+    if(m_oMediaModel->setData(m_oMediaModel->index(listIndex),QVariant("black"), ACIListModel::ValueRole2)==true){
+        TRACE(QString("setData success!"));
+    } else {
+        TRACE(QString("setData failed!"));
+    }
 }
 
 void ACIMedia::mediaModelClicked(Item itemClicked){

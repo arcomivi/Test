@@ -31,6 +31,8 @@ public slots:
     void volup();
     void voldown();
 
+    void currentListIndexChanged(int listIndex);
+
 private:
     enum {
         MEDIA_INITIAL = -1,

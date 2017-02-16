@@ -75,20 +75,23 @@ void ACIMusicPlayer::setPlaylist(QMediaPlaylist *playlist){
  * @newState: status of media
  */
 void ACIMusicPlayer::metaStateChanged(QMediaPlayer::MediaStatus newState){
-    TRACE(newState);
-    if(newState == QMediaPlayer::InvalidMedia){
+    switch (newState) {
+    case QMediaPlayer::InvalidMedia:
+        TRACE("QMediaPlayer::InvalidMedia");
         emit invalidMedia(m_oPlayer->errorString());
         return;
-    }
-    if(newState == QMediaPlayer::NoMedia){
+        break;
+    case QMediaPlayer::NoMedia:
+        TRACE("QMediaPlayer::NoMedia");
         //about to finish
         aboutToFinish();
         emit sendTitle(" ### ");
         m_bPlaylistChanged=true;
         m_oPlayer->setPlaylist(m_oPlayer->playlist());
         return;
-    }
-    if(newState==QMediaPlayer::BufferedMedia){
+        break;
+    case QMediaPlayer::BufferedMedia:
+        TRACE("QMediaPlayer::BufferedMedia");
         if(m_oPlayer->isMetaDataAvailable()){
             TRACE("BufferedMedia - medateda available");
 
@@ -107,6 +110,10 @@ void ACIMusicPlayer::metaStateChanged(QMediaPlayer::MediaStatus newState){
             emit sendTitle(album_title  + album_artist);
         }
         return;
+        break;
+    default:
+        TRACE(newState);
+        break;
     }
 }
 
@@ -151,6 +158,7 @@ void ACIMusicPlayer::aboutToFinish(){
 void ACIMusicPlayer::currentIndexChanged(int index)
 {
     TRACE(QString("currentIndexChanged: %0").arg(index));
+    emit currentListIndexChanged(index);
 }
 
 void ACIMusicPlayer::mediaChanged(int start, int end)

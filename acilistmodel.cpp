@@ -92,6 +92,17 @@ QVariant ACIListModel::data(const QModelIndex & index, int role) const {
     return QVariant();
 }
 
+bool ACIListModel::setData(const QModelIndex &index, const QVariant &value, int role){
+    if (index.isValid() && role == ValueRole2) {
+        Item &item = m_items[index.row()];
+        item.setValue2(value.toString());
+        m_items.replace(index.row(), item);
+        emit dataChanged(index, index);
+        return true;
+    }
+    return false;
+}
+
 /**
  * remove rows
  */
@@ -118,4 +129,11 @@ QHash<int, QByteArray> ACIListModel::roleNames() const
     roles[IconRole] = "icon";
     roles[ValueRole2] = "value2";
     return roles;
+}
+
+Qt::ItemFlags ACIListModel::flags(const QModelIndex &index) const{
+    if (!index.isValid())
+             return Qt::ItemIsEnabled;
+
+         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 }
