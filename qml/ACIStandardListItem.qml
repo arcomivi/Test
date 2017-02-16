@@ -21,7 +21,7 @@ Item {
                 pixelSize: 18;
                 bold: true
             }
-            color: standardListItem.ListView.isCurrentItem ? "#B5C808" : "white"
+            color: standardListItem.ListView.isCurrentItem ? "#B5C808" : (value2===""?"white": value2 )
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
