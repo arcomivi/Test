@@ -143,7 +143,7 @@ Item {
         }
 
         function handleLeave(){
-            //console.log("viewsSwitcher.handleLeave");
+
         }
 
         function goToView(view, qmlname){
@@ -196,6 +196,9 @@ Item {
                 mainview.m_current = 0;
                 mainview.children[m_current].handleEnter();
             }
+            onUpdate: {
+                mainview.update();
+            }
         }
     }
 
@@ -213,7 +216,7 @@ Item {
         onPrevMusic: mediaViewLoader.item.handlePrevious();
         onPlaypauseMusic: mediaViewLoader.item.handleRelease();
         onNextMusic: mediaViewLoader.item.handleNext();
-        onGoUp: { mainview.m_current = 1; }
+        onBackToPrevious: { mainview.m_current = 1; }
     }
 
     //status bar

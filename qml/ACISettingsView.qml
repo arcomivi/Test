@@ -5,11 +5,16 @@ Item {
 
     signal goUp
     signal goDown
+    signal update
 
     function handleDirUp(){
         console.log("settingsView.handleDirUp");
         goUp();
     }
+    function handleRelease(){
+        update();
+    }
+
     Rectangle { color: "#636363"; anchors.fill: parent;
         Text {
             id: settingsViewText
