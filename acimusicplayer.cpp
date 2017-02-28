@@ -147,7 +147,7 @@ void ACIMusicPlayer::error(QMediaPlayer::Error error){
     default:
         break;
     }
-    m_oPlayer->stop();
+//    m_oPlayer->stop();
 }
 
 void ACIMusicPlayer::aboutToFinish(){

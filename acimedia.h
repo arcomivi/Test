@@ -1,6 +1,5 @@
 #ifndef ACIMEDIA_H
 #define ACIMEDIA_H
-
 #include <QObject>
 #include "acilistmodel.h"
 #include "acimusicplayer.h"
@@ -60,6 +59,7 @@ private:
     int m_iMediaType;
     int m_iMusicType;
     int m_iVideoType;
+    int m_iPreviousCurrentListIndex;
     QString m_sCurrentVideo;
     ACIListModel *m_oMediaModel;
     ACIMusicPlayer *m_oMusicPlayer;
@@ -67,5 +67,6 @@ private:
     QList<QMediaContent> m_songList;
     bool m_bNewPlaylist;
 };
+
 
 #endif // ACIMEDIA_H

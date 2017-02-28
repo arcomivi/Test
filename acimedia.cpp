@@ -10,6 +10,8 @@ ACIMedia::ACIMedia(QObject *parent) : QObject(parent){
     m_songList.clear();
     m_bNewPlaylist = true;
 
+    m_iPreviousCurrentListIndex = -1;
+
     connect(m_oMediaModel, SIGNAL(itemClicked(Item)), this, SLOT(mediaModelClicked(Item)));
 
     connect(m_oMusicPlayer, SIGNAL(sendProgress(int)), this, SIGNAL(sendProgress(int)));
@@ -57,10 +59,15 @@ void ACIMedia::voldown(){
 void ACIMedia::currentListIndexChanged(int listIndex){
 
     if(m_iMediaType!=MEDIA_MUSIC && m_iMusicType!=MUSIC_ALL_SONGS){
+        m_iPreviousCurrentListIndex = listIndex+1;
         return;
     }
     TRACE(QString("currentListIndexChanged: %1").arg(listIndex));
-    if(m_oMediaModel->setData(m_oMediaModel->index(listIndex),QVariant("black"), ACIListModel::ValueRole2)==true){
+    if(m_iPreviousCurrentListIndex!=-1){
+        m_oMediaModel->setData(m_oMediaModel->index(m_iPreviousCurrentListIndex),QVariant(""), ACIListModel::ValueRole2);
+    }
+    if(m_oMediaModel->setData(m_oMediaModel->index(listIndex+1),QVariant("black"), ACIListModel::ValueRole2)==true){
+        m_iPreviousCurrentListIndex = listIndex+1;
         TRACE(QString("setData success!"));
     } else {
         TRACE(QString("setData failed!"));
@@ -92,6 +99,11 @@ void ACIMedia::mediaModelClicked(Item itemClicked){
             m_bNewPlaylist = false;
         }
         m_oMusicPlayer->playPause(m_oMediaModel->getCurrentIndex()==0?0:m_oMediaModel->getCurrentIndex()-1);
+        if(m_iPreviousCurrentListIndex!=-1){
+            m_oMediaModel->setData(m_oMediaModel->index(m_iPreviousCurrentListIndex),QVariant(""), ACIListModel::ValueRole2);
+        }
+        m_oMediaModel->setData(m_oMediaModel->index(m_oMediaModel->getCurrentIndex()),QVariant("black"), ACIListModel::ValueRole2);
+        m_iPreviousCurrentListIndex = m_oMediaModel->getCurrentIndex();
     } else if(name.compare("MEDIA_VIDEO")==0){
         m_iMediaType=MEDIA_VIDEO;
         m_iVideoType=VIDEO_INITIAL;
@@ -209,6 +221,9 @@ void ACIMedia::displayAllSongs(){
                 }
             }
         }
+    }
+    if(m_iPreviousCurrentListIndex!=-1){
+        m_oMediaModel->setData(m_oMediaModel->index(m_iPreviousCurrentListIndex),QVariant("black"), ACIListModel::ValueRole2);
     }
 }
 

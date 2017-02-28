@@ -1,6 +1,7 @@
 #ifndef ACIMUSICPLAYER_H
 #define ACIMUSICPLAYER_H
 
+
 #include <QObject>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
