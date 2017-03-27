@@ -15,10 +15,11 @@ Item {
         color: "#636363"
         Text {
             id: standardListItemText
+            renderType: Text.NativeRendering
             text: descr
             font {
                 family: "Helvetica";
-                pixelSize: 18;
+                pixelSize: 13;
                 bold: true
             }
             color: standardListItem.ListView.isCurrentItem ? "#B5C808" : (value2===""?"white": value2 )

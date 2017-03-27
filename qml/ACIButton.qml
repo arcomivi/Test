@@ -97,14 +97,14 @@ Item {
         id: buttonImage
         source: btnImg
         anchors.centerIn: parent
-        fillMode: Image.Pad;//PreserveAspectFit
-        //scale: 0.13;
+        fillMode: Image.Pad;
         smooth: false;
         asynchronous: true;
     }
 
     Text {
         id: btnText
+        renderType: Text.NativeRendering
         color: textColor
         anchors.centerIn: buttonImage
         style: Text.Raised

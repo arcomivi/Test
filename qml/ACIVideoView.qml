@@ -52,6 +52,7 @@ Item {
 
         Text {
             id: foo
+            renderType: Text.NativeRendering
             text: qsTr("Steering Video");
             color: "white"
             anchors.centerIn: parent;

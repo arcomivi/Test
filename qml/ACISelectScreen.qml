@@ -11,6 +11,7 @@ Item {
     Rectangle { color: "#636363"; anchors.fill: parent; }
     Text {
         id: screenSelectorText
+        renderType: Text.NativeRendering
         text: qsTr("Select Screen");
         color: "white";
         width: parent.width;

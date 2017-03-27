@@ -21,6 +21,7 @@ Item {
         anchors.fill: parent;
         Text {
             id: navi
+            renderType: Text.NativeRendering
             text: qsTr("navi")
             color: "white"
             anchors.centerIn: parent;

@@ -28,6 +28,7 @@ Rectangle {
             Column {
                 Text {
                     id: mediaProgressText;
+                    renderType: Text.NativeRendering
                     text: ""
 //                    anchors { centerIn: parent; }
                 }

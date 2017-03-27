@@ -76,6 +76,7 @@ Item {
             id: txt_song_time
             text: "00:00"
             color: "black"
+            renderType: Text.NativeRendering
             font {
                 family: "Helvetica";
                 pixelSize: 16
@@ -89,6 +90,7 @@ Item {
 
         Text {
             id: txt_album_artist
+            renderType: Text.NativeRendering
             text: "<artist> - <album/song>"
             font.bold: true
             font.family: "Helvetica"
@@ -111,6 +113,7 @@ Item {
 
         Text {
             id: txt_time
+            renderType: Text.NativeRendering
             text: "10:43"
             anchors.right: img_gps.left
             anchors.rightMargin: 5
